@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FNAF 1v1 Battle Video Maker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>FNAF 1v1 Battle Video Maker</h1>
+    </header>
+    <main>
+        <section id="character-selection">
+            <h2>Select Characters</h2>
+            <div id="character-list"></div>
+        </section>
+        <section id="attribute-selection">
+            <h2>Select Battle Attributes</h2>
+            <div id="attribute-list">
+                <div class="attribute"><input type="checkbox" id="strength" name="attributes" value="Strength"><label for="strength">Strength</label></div>
+                <div class="attribute"><input type="checkbox" id="speed" name="attributes" value="Speed"><label for="speed">Speed</label></div>
+                <div class="attribute"><input type="checkbox" id="intelligence" name="attributes" value="Intelligence"><label for="intelligence">Intelligence</label></div>
+                <div class="attribute"><input type="checkbox" id="battle-iq" name="attributes" value="Battle IQ"><label for="battle-iq">Battle IQ</label></div>
+                <div class="attribute"><input type="checkbox" id="attack-potency" name="attributes" value="Attack Potency"><label for="attack-potency">Attack Potency</label></div>
+                <div class="attribute"><input type="checkbox" id="destruction-capability" name="attributes" value="Destruction Capability"><label for="destruction-capability">Destruction Capability</label></div>
+                <div class="attribute"><input type="checkbox" id="abilities" name="attributes" value="Abilities"><label for="abilities">Abilities</label></div>
+                <div class="attribute"><input type="checkbox" id="hax" name="attributes" value="Hax"><label for="hax">Hax</label></div>
+                <div class="attribute"><input type="checkbox" id="power" name="attributes" value="Power"><label for="power">Power</label></div>
+                <div class="attribute"><input type="checkbox" id="skills" name="attributes" value="Skills"><label for="skills">Skills</label></div>
+            </div>
+        </section>
+        <section id="scoring">
+            <h2>Assign Scores</h2>
+            <div id="score-list">
+                <!-- Scores will be dynamically generated here -->
+            </div>
+        </section>
+        <section id="battle-preview">
+            <h2>Battle Preview</h2>
+            <div id="preview-area"></div>
+        </section>
+        <section id="generate-video">
+            <button id="generate-button">Generate Video</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+}
+
+header {
+    background-color: #444;
+    padding: 20px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section {
+    margin: 20px 0;
+}
+
+#character-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.character-card {
+    background-color: #333;
+    border: 1px solid #555;
+    margin: 10px;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.character-card.selected {
+    border-color: #ffcc00;
+}
+
+#attribute-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.attribute {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #555;
+    background-color: #333;
+    cursor: pointer;
+}
+
+.attribute label {
+    cursor: pointer;
+}
+
+#score-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.score-item {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #555;
+    background-color: #333;
+}
+
+.score-item label {
+    margin-right: 10px;
+}
+
+#preview-area {
+    width: 600px;
+    height: 400px;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #555;
+}
+
+#generate-button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+const characters = [
+    // Canon characters
+    "Freddy", "Bonnie", "Chica", "Foxy", "Golden Freddy", "Springtrap", "Circus Baby", "Ballora", "Ennard", "Funtime Freddy",
+    "Funtime Foxy", "Lolbit", "Lefty", "Rockstar Freddy", "Rockstar Bonnie", "Rockstar Chica", "Rockstar Foxy", "Molten Freddy",
+    "Scrap Baby", "Scraptrap", "Glitchtrap", "Vanny", "Dreadbear", "Grimm Foxy", "Nightmare Freddy", "Nightmare Bonnie",
+    "Nightmare Chica", "Nightmare Foxy", "Nightmare Fredbear", "Nightmare", "Jack-O-Bonnie", "Jack-O-Chica", "Nightmare Mangle",
+    "Nightmare Balloon Boy", "Nightmare Puppet", "Nightmare Cupcake", "Nightmarionne", "Phantom Freddy", "Phantom Chica",
+    "Phantom Foxy", "Phantom Mangle", "Phantom Balloon Boy", "Phantom Puppet", "Phantom Shadow Freddy", "Phantom Shadow Bonnie",
+    "Toy Freddy", "Toy Bonnie", "Toy Chica", "Mangle", "Balloon Boy", "JJ", "Shadow Freddy", "Shadow Bonnie", "Plushtrap",
+    "Mini-rena", "Bidybab", "Electrobab", "Yendo", "Bonnet", "Bonnie Puppet", "Chica Puppet", "Endo-01", "Endo-02", "RWQFSFASXC",
+    "Nightmare Endo", "Withered Freddy", "Withered Bonnie", "Withered Chica", "Withered Foxy", "Withered Golden Freddy",
+    "Withered Shadow Freddy", "Withered Shadow Bonnie", "Classic Freddy", "Classic Bonnie", "Classic Chica", "Classic Foxy",
+    "Classic Golden Freddy", "Classic Shadow Freddy", "Classic Shadow Bonnie", "Original Freddy", "Original Bonnie",
+    "Original Chica", "Original Foxy", "Original Golden Freddy", "Original Shadow Freddy", "Original Shadow Bonnie", "Fredbear",
+    "Spring Bonnie", "Adventure Freddy", "Adventure Bonnie", "Adventure Chica", "Adventure Foxy", "Adventure Golden Freddy",
+    "Adventure Shadow Freddy", "Adventure Shadow Bonnie",
+    // Fan game characters
+    "Candy", "Cindy", "Chester", "Blank", "Old Candy", "Rat", "Cat", "Popgoes", "Blake", "Stone", "Sara", "Saffron", "Fritz",
+    "Tangle", "Hollow", "Lockjaw", "Ignited Freddy", "Ignited Bonnie", "Ignited Chica", "Ignited Foxy", "Monster Rat", 
+    "Monster Cat", "The Origami Cat", "The Penguin", "Vinny", "Shadow Candy", "The Puppeteer", "The Shadow Rat", "The Shadow Cat",
+    "Ducky", "Mr. Can-Do", "Noah", "Paranormal Power Supply", "Robo-Skeleton", "Ruby", "Scrap Endo", "Withered Candy", "Vinnie",
+    "The Crocodile", "Five Nights at Candy's",
+    // One Night at Flumpty's characters
+    "Flumpty Bumpty", "Birthday Boy Blam", "The Redman", "Grunkfuss the Clown", "The Beavowl", "Golden Flumpty", "Eyesaur", 
+    "The Owl", "The Beaver", "MatPat", "Baron von Baddie", "George"
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const characterList = document.getElementById('character-list');
+    const attributeList = document.getElementById('attribute-list');
+    const scoreList = document.getElementById('score-list');
+
+    characters.forEach(character => {
+        const characterCard = document.createElement('div');
+        characterCard.className = 'character-card';
+        characterCard.textContent = character;
+        characterCard.addEventListener('click', () => {
+            characterCard.classList.toggle('selected');
+            updateScoreInputs();
+        });
+        characterList.appendChild(characterCard);
+    });
+
+    const generateButton = document.getElementById('generate-button');
+    generateButton.addEventListener('click', () => {
+        const selectedCharacters = Array.from(document.getElementsByClassName('selected')).map(card => card.textContent);
+        const selectedAttributes = Array.from(document.querySelectorAll('input[name="attributes"]:checked')).map(input => input.value);
+
+        if (selectedCharacters.length === 2 && selectedAttributes.length > 0) {
+            const scores = {};
+            selectedAttributes.forEach(attribute => {
+                scores[attribute] = {
+                    [selectedCharacters[0]]: document.getElementById(`${attribute}-${selectedCharacters[0]}`).value,
+                    [selectedCharacters[1]]: document.getElementById(`${attribute}-${selectedCharacters[1]}`).value
+                };
+            });
+            console.log("Selected Characters:", selectedCharacters);
+            console.log("Selected Attributes:", selectedAttributes);
+            console.log("Scores:", scores);
+            // Display the battle preview and other operations
+        } else {
+            alert('Please select two characters and at least one attribute.');
+        }
+    });
+
+    attributeList.addEventListener('change', updateScoreInputs);
+
+    function updateScoreInputs() {
+        const selectedCharacters = Array.from(document.getElementsByClassName('selected')).map(card => card.textContent);
+        const selectedAttributes = Array.from(document.querySelectorAll('input[name="attributes"]:checked')).map(input => input.value);
+
+        scoreList.innerHTML = '';
+
+        if (selectedCharacters.length === 2 && selectedAttributes.length > 0) {
+            selectedAttributes.forEach(attribute => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                scoreItem.innerHTML = `
+                    <label>${attribute} - ${selectedCharacters[0]}</label>
+                    <input type="number" id="${attribute}-${selectedCharacters[0]}" min="0" max="10">
+                    <label>${attribute} - ${selectedCharacters[1]}</label>
+                    <input type="number" id="${attribute}-${selectedCharacters[1]}" min="0" max="10">
+                `;
+                scoreList.appendChild(scoreItem);
+            });
+        }
+    }
+});
